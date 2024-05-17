@@ -18,7 +18,7 @@ public class Post
     
     public DateTime ModifiedAt { get; private set; }
     
-    public int LikeCount { get; private set; }
-    
-    public int CommentCount { get; private set; }
+    public List<Like> Likes = new List<Like>();
+
+    public List<Comment> Comments = new List<Comment>();
 }
