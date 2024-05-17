@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMedia.Application.Common.interfaces;
+using SocialMedia.Domain.Entities;
 using SocialMedia.Domain.Entities.User;
 
 namespace SocialMedia.Infrastructure.Contexts;
@@ -40,6 +41,11 @@ public class SmDbContext(DbContextOptions<SmDbContext> options): IdentityDbConte
         
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql("Host=localhost;Username=postgres;Password=root;Database=SocialMedia");
+    }
+
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     // {
     //     // if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Test")
@@ -50,6 +56,12 @@ public class SmDbContext(DbContextOptions<SmDbContext> options): IdentityDbConte
     
     // public DbSet<Event> Events => Set<Event>();
     public override DbSet<ApplicationUser> Users => Set<ApplicationUser>();
+    public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<Event> Events => Set<Event>();
+    public DbSet<Friendship> Friendships => Set<Friendship>();
+    public DbSet<Like> Likes => Set<Like>();
+    public DbSet<Message> Messages => Set<Message>();
+    public DbSet<Post> Posts => Set<Post>();
   
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
