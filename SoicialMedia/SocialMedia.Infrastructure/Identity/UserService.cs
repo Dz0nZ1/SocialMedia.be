@@ -1,5 +1,6 @@
 ﻿using SocialMedia.Application.Common.interfaces;
 using SocialMedia.Domain.Entities;
+using SocialMedia.Domain.Entities.User;
 using SocialMedia.Infrastructure.Exceptions;
 
 namespace SocialMedia.Infrastructure.Identity;
@@ -8,9 +9,9 @@ public class UserService(ApplicationUserManager userManager) : IUserService
 {
     public async Task CreateUserAsync(string emailAddress, List<string> roles)
     {
-        var userAlradyExists = await GetUserByEmailAsync(emailAddress);
+        var userAlreadyExists = await GetUserByEmailAsync(emailAddress);
         
-        if(userAlradyExists is not null) return;
+        if(userAlreadyExists is not null) return;
 
         ApplicationUser user = new()
         {

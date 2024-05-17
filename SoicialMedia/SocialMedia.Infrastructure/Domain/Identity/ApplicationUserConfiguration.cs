@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SocialMedia.Domain.Entities;
+using SocialMedia.Domain.Entities.User;
 
 namespace SocialMedia.Infrastructure.Domain.Identity;
 
@@ -18,6 +18,12 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         {
 
             Id = AdminId,
+            FirstName = "Nikola",
+            LastName = "Lelekovic",
+            ProfilePictureUrl = "www.profile-picture.com/my-profile-picture.jpeg",
+            Bio = "Software Engineer working full time",
+            CreatedAt = DateTime.Now,
+            ModifiedAt = DateTime.Now,
             UserName = "nikola@email.com",
             NormalizedUserName = "NIKOLA@EMAIL.COM",
             Email = "nikola@email.com",
@@ -25,8 +31,6 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             SecurityStamp = new Guid().ToString("D"),
-            FirstName = "Nikola",
-            LastName = "Lelekovic",
             ConcurrencyStamp = "c188a435-cfc8-45fd-836c-9a18bb9de405",
             AccessFailedCount = 0
         };

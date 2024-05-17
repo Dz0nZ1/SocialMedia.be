@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SocialMedia.Application.Common.interfaces;
-using SocialMedia.Domain.Entities;
+using SocialMedia.Domain.Entities.User;
 using SocialMedia.Infrastructure.Configuration;
 using SocialMedia.Infrastructure.Contexts;
 using SocialMedia.Infrastructure.Identity;

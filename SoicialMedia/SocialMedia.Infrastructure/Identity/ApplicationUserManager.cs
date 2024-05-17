@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SocialMedia.Domain.Entities;
+using SocialMedia.Domain.Entities.User;
 
 namespace SocialMedia.Infrastructure.Identity;
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMedia.Application.Common.interfaces;
-using SocialMedia.Domain.Entities;
+using SocialMedia.Domain.Entities.User;
 
 namespace SocialMedia.Infrastructure.Contexts;
 

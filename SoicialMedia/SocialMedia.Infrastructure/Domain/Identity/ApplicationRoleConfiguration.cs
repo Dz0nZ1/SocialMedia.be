@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SocialMedia.Domain.Entities;
+using SocialMedia.Domain.Entities.User;
 
 namespace SocialMedia.Infrastructure.Domain.Identity;
 

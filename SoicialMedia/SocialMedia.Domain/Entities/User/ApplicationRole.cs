@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace SocialMedia.Domain.Entities;
+namespace SocialMedia.Domain.Entities.User;
 
 public class ApplicationRole : IdentityRole
 {

@@ -1,4 +1,4 @@
-﻿using SocialMedia.Domain.Entities;
+﻿using SocialMedia.Domain.Entities.User;
 
 namespace SocialMedia.Application.Common.interfaces;
 
