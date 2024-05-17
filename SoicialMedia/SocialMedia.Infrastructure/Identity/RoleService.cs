@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SocialMedia.Application.Common.interfaces;
-using SocialMedia.Domain.Entities;
+using SocialMedia.Domain.Entities.User;
 
 namespace SocialMedia.Infrastructure.Identity;
 
