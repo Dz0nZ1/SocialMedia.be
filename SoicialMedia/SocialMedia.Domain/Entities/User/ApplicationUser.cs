@@ -22,6 +22,12 @@ public class ApplicationUser : IdentityUser
    
    public IList<ApplicationUserRole> Roles { get; } = new List<ApplicationUserRole>();
 
+   public List<Post> Posts = new List<Post>();
+
+   public List<Like> Likes = new List<Like>();
+
+   public List<Comment> Comments = new List<Comment>();
+
    #endregion
 
 }

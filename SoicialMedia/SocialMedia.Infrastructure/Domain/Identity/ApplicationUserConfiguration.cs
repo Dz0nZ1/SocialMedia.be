@@ -20,6 +20,7 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             Id = AdminId,
             FirstName = "Nikola",
             LastName = "Lelekovic",
+            Username = "dzonzi",
             ProfilePictureUrl = "www.profile-picture.com/my-profile-picture.jpeg",
             Bio = "Software Engineer working full time",
             CreatedAt = DateTime.Now,
@@ -37,8 +38,17 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 
         builder.HasData(admin);
 
+        //Relationship with roles
         builder
             .HasMany(x => x.Roles)
+            .WithOne()
+            .HasForeignKey(x => x.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        //Relationship with posts
+        builder
+            .HasMany(x => x.Posts)
             .WithOne()
             .HasForeignKey(x => x.UserId)
             .IsRequired()
