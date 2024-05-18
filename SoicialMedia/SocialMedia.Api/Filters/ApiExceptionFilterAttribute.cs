@@ -19,6 +19,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             {typeof(NotFoundException), HandleNotFoundException},
             {typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException},
             {typeof(ArgumentNullException), HandleArgumentNullException},
+            {typeof(UserAlreadyExistsException), HandleUserAlreadyExistsException}
             // {typeof(AuthException), HandleAuthException}
         };
     }
@@ -54,6 +55,22 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
         
         context.Result = new BadRequestObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+    
+    private void HandleUserAlreadyExistsException(ExceptionContext context)
+    {
+        var exception = (UserAlreadyExistsException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.8",
+            Title = "The specified user already exists.",
+            Detail = exception.Message
+        };
+
+        context.Result = new ConflictObjectResult(details);
 
         context.ExceptionHandled = true;
     }
