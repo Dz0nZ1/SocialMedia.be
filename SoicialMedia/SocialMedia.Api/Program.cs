@@ -101,6 +101,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(WebApplicationConstants.NEXTJS_APPLICATION);
 
+app.Use(async (context, next) =>
+{
+    var syncIoFeature = context.Features.Get<Microsoft.AspNetCore.Http.Features.IHttpBodyControlFeature>();
+    if (syncIoFeature != null)
+    {
+        syncIoFeature.AllowSynchronousIO = true;
+    }
+
+    await next();
+});
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
