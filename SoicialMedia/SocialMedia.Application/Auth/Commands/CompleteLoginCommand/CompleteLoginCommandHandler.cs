@@ -1,5 +1,6 @@
 ﻿using EMS.Application.Common.Dto.Auth;
 using MediatR;
+using SocialMedia.Application.Common.Dto.Auth;
 using SocialMedia.Application.Common.interfaces;
 
 namespace SocialMedia.Application.Auth.Commands.CompleteLoginCommand;
