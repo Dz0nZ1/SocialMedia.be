@@ -21,8 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Common\Mappers\" />
-      <Folder Include="Common\Validators\" />
+      <Folder Include="Comment\Queries\" />
     </ItemGroup>
 
 </Project>

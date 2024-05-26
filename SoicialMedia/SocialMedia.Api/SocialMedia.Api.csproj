@@ -17,10 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\Base\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\SocialMedia.Application\SocialMedia.Application.csproj" />
       <ProjectReference Include="..\SocialMedia.Infrastructure\SocialMedia.Infrastructure.csproj" />
     </ItemGroup>
