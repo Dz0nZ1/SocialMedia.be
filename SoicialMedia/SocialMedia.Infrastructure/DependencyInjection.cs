@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SocialMedia.Application.Common.interfaces;
 using SocialMedia.Domain.Entities.User;
+using SocialMedia.Infrastructure.Auth.Extensions;
 using SocialMedia.Infrastructure.Configuration;
 using SocialMedia.Infrastructure.Contexts;
 using SocialMedia.Infrastructure.Identity;
@@ -28,6 +29,8 @@ public static class DependencyInjection
         serviceCollection.AddScoped<ISmDbContext>(provider => provider.GetRequiredService<SmDbContext>());
         
         //Business logic
+        serviceCollection.AddScoped<IPostService, PostService>();
+        serviceCollection.AddScoped<ICommentService, CommentService>();
         
         //Authentication
         serviceCollection
@@ -35,7 +38,8 @@ public static class DependencyInjection
             .AddRoleManager<RoleManager<ApplicationRole>>()
             .AddUserManager<ApplicationUserManager>()
             .AddEntityFrameworkStores<SmDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddPasswordlessLoginTokenProvider();
         serviceCollection.AddScoped<IAuthService, AuthService>();
         serviceCollection.AddScoped<IUserService, UserService>();
         serviceCollection.AddScoped<IRoleService, RoleService>();
