@@ -28,6 +28,26 @@ public class ApplicationUser : IdentityUser
 
    public List<Comment> Comments = new List<Comment>();
 
+   public List<RefreshToken> RefreshTokens = new List<RefreshToken>();
+
    #endregion
 
+   #region Extensions
+
+   public ApplicationUser UpdateUser(string firstName, string lastName, string username, string profilePictureUrl,
+      string bio)
+   {
+      FirstName = firstName;
+      LastName = lastName;
+      Username = username;
+      UserName = username;
+      NormalizedUserName = username.ToUpper();
+      ProfilePictureUrl = profilePictureUrl;
+      ModifiedAt = DateTime.Now;
+      Bio = bio;
+      return this;
+   }
+   
+
+   #endregion
 }
