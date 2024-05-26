@@ -1,8 +1,11 @@
-﻿using MediatR;
+﻿using System.IdentityModel.Tokens.Jwt;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Application.Auth.Commands.BeginLoginCommand;
 using SocialMedia.Application.Auth.Commands.CompleteLoginCommand;
+using SocialMedia.Application.Auth.Commands.RefreshTokenCommand;
+using SocialMedia.Application.Common.Dto.Auth;
 using SocialMedia.Application.Common.Dto.User;
 using SocialMedia.Application.User.Commands.RegisterUserCommand;
 
@@ -22,4 +25,12 @@ public class AuthController : ApiControllerBase
     [HttpPost]
     public async Task<ActionResult<UserDetailsDto>> Register(RegisterUserCommand command) =>
         Ok(await Mediator.Send(command));
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<ActionResult<TokenResponse>> Refresh(RefreshTokenCommand command) =>
+        Ok(await Mediator.Send(command));
+
+
+
 }
