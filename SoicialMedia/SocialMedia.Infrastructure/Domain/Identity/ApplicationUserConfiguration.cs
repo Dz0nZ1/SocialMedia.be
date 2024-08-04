@@ -16,7 +16,6 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
         
         var admin = new ApplicationUser
         {
-
             Id = AdminId,
             FirstName = "Nikola",
             LastName = "Lelekovic",
@@ -25,6 +24,9 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             Bio = "Software Engineer working full time",
             CreatedAt = DateTime.Now,
             ModifiedAt = DateTime.Now,
+            PhoneNumber = "123-456-789",
+            JobPosition = "Software Engineer",
+            Location = "Belgrade, Serbia",
             UserName = "nikola@email.com",
             NormalizedUserName = "NIKOLA@EMAIL.COM",
             Email = "nikola@email.com",

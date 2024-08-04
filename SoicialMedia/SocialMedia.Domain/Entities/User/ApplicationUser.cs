@@ -7,11 +7,11 @@ public class ApplicationUser : IdentityUser
    #region Properties
 
    public string FirstName { get; set; }
-
    public string LastName { get; set; }
-
    public string Username { get; set; }
-   
+   public string PhoneNumber { get; set; }
+   public string JobPosition { get; set; }
+   public string Location { get; set; }
    public string ProfilePictureUrl { get; set; }
 
    public string Bio { get; set; }
@@ -34,17 +34,19 @@ public class ApplicationUser : IdentityUser
 
    #region Extensions
 
-   public ApplicationUser UpdateUser(string firstName, string lastName, string username, string profilePictureUrl,
-      string bio)
+   public ApplicationUser UpdateUser(string firstName, string lastName, string username,
+      string bio, string phoneNumber, string jobPosition, string location)
    {
       FirstName = firstName;
       LastName = lastName;
       Username = username;
       UserName = username;
-      NormalizedUserName = username.ToUpper();
-      ProfilePictureUrl = profilePictureUrl;
-      ModifiedAt = DateTime.Now;
       Bio = bio;
+      PhoneNumber = phoneNumber;
+      JobPosition = jobPosition;
+      Location = location;
+      NormalizedUserName = username.ToUpper();
+      ModifiedAt = DateTime.Now;
       return this;
    }
    
