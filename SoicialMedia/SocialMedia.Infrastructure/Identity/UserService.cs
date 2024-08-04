@@ -1,26 +1,26 @@
 ﻿using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SocialMedia.Application.Common.Constants.User;
 using SocialMedia.Application.Common.Dto.Common;
 using SocialMedia.Application.Common.Dto.User;
 using SocialMedia.Application.Common.Exceptions;
+using SocialMedia.Application.Common.Extensions;
 using SocialMedia.Application.Common.interfaces;
 using SocialMedia.Application.Common.Mappers.User;
-using SocialMedia.Domain.Entities;
+using SocialMedia.Application.Configuration;
 using SocialMedia.Domain.Entities.User;
 using SocialMedia.Infrastructure.Exceptions;
 
 namespace SocialMedia.Infrastructure.Identity;
 
-public class UserService(ApplicationUserManager userManager) : IUserService
+public class UserService(ApplicationUserManager userManager, IOptions<AesEncryptionConfiguration> aesEncryptionConfiguration) : IUserService
 {
     public async Task<UserDetailsDto?> CreateUserAsync(CreateUserDetailsDto userDetails, List<string> roles)
     {
         var userAlreadyExists = await userManager.FindByEmailAsync(userDetails.Email);
 
         if (userAlreadyExists is not null) throw new UserAlreadyExistsException("User Already Exists");
-        
-        //TODO: Dodati broj Telefona @Nikola
         
         ApplicationUser user = new()
         {
@@ -31,9 +31,13 @@ public class UserService(ApplicationUserManager userManager) : IUserService
             NormalizedUserName = userDetails.Username.ToUpper(),
             ProfilePictureUrl = userDetails.ProfilePictureUrl,
             Bio = userDetails.Bio,
+            PhoneNumber = userDetails.PhoneNumber,
+            JobPosition = userDetails.JobPosition,
+            Location = userDetails.Location,
             CreatedAt = DateTime.Now,
             ModifiedAt = DateTime.Now,
             Email = userDetails.Email,
+            PasswordHash = userDetails.Password.Encrypt(aesEncryptionConfiguration.Value.Key),
             NormalizedEmail = userDetails.Email.ToUpper(),
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
@@ -58,7 +62,6 @@ public class UserService(ApplicationUserManager userManager) : IUserService
             {
                 throw new AuthException("Could not add roles to user", new { Errors = rolesResult.Errors.ToList() });
             }
-
             return user.ToDetailsDto();
 
         }
@@ -71,7 +74,11 @@ public class UserService(ApplicationUserManager userManager) : IUserService
 
     public async Task<UserDetailsDto?> GetUserAsync(string userId)
     {
-        var user = await userManager.Users.Include(x => x.Posts).Where(x => x.Id.Equals(userId)).FirstOrDefaultAsync() ?? throw new NotFoundException("User not found");
+        var user = await userManager.Users
+            .Include(x => x.Posts.OrderByDescending(p => p.CreatedAt))
+            .ThenInclude(x => x.Comments)
+            .ThenInclude(x => x.User)
+            .Where(x => x.Id.Equals(userId)).FirstOrDefaultAsync() ?? throw new NotFoundException("User not found");
         return user.ToDetailsDto();
     }
     
@@ -82,7 +89,8 @@ public class UserService(ApplicationUserManager userManager) : IUserService
 
     public async Task<UserDetailsDto?> GetUserByEmailAsync(string emailAddress)
     {
-       var user = await userManager.FindByEmailAsync(emailAddress) ?? throw new NotFoundException("User not found");
+       var user = await userManager
+           .FindByEmailAsync(emailAddress) ?? throw new NotFoundException("User not found");
        return user.ToDetailsDto();
     }
     
@@ -96,8 +104,11 @@ public class UserService(ApplicationUserManager userManager) : IUserService
     }
 
     public async Task<List<UserDetailsDto>> GetAllUsers()
-    {
-      var users =  await userManager.Users.Include(x => x.Posts).ToListAsync();
+    { 
+      var users =  await userManager.Users
+          .Include(x => x.Posts)
+          .Include(x => x.Comments)
+          .ToListAsync();
       return users.ToDetailsListDto();
     }
 
