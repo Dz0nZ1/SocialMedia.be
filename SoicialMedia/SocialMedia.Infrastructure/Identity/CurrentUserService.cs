@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using SocialMedia.Application.Common.Constants;
+using SocialMedia.Application.Common.Constants.Auth;
 using SocialMedia.Application.Common.interfaces;
 
 namespace SocialMedia.Infrastructure.Identity;

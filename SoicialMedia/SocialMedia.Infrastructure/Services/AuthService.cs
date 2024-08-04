@@ -8,14 +8,16 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SocialMedia.Application.Common.Dto.Auth;
 using SocialMedia.Application.Common.Exceptions;
+using SocialMedia.Application.Common.Extensions;
 using SocialMedia.Application.Common.interfaces;
+using SocialMedia.Application.Configuration;
 using SocialMedia.Domain.Entities.User;
 using SocialMedia.Infrastructure.Configuration;
 using SocialMedia.Infrastructure.Identity;
 
 namespace SocialMedia.Infrastructure.Services;
 
-public class AuthService(ApplicationUserManager userManager, IOptions<JwtConfiguration> jwtOptions, ISmDbContext dbContext) : IAuthService
+public class AuthService(ApplicationUserManager userManager, IOptions<JwtConfiguration> jwtOptions, ISmDbContext dbContext, IOptions<AesEncryptionConfiguration> aesEncryptionConfiguration) : IAuthService
 {
     private readonly JwtConfiguration _jwtConfiguration = jwtOptions.Value;
     private const string Purpose = "passwordless-auth";
@@ -52,7 +54,7 @@ public class AuthService(ApplicationUserManager userManager, IOptions<JwtConfigu
                 userToken);
 
             if (!isValid)
-                return new CompleteLoginResponseDto();
+                throw new UnauthorizedAccessException();
 
             await userManager.UpdateSecurityStampAsync(user);
 
@@ -79,10 +81,53 @@ public class AuthService(ApplicationUserManager userManager, IOptions<JwtConfigu
             
             await StoreRefreshTokenAsync(user, refreshToken);
             
-            return new CompleteLoginResponseDto(user.Email, roles, token, refreshToken);
+            return new CompleteLoginResponseDto(user.Id,user.FirstName, user.LastName, user.Username, user.Email, roles, token, refreshToken);
         }
 
-        return new CompleteLoginResponseDto();
+        throw new UnauthorizedAccessException();
+    }
+    
+    public async Task<CompleteLoginResponseDto> BasicLoginAsync(BasicLoginDto basicLoginDto)
+    {
+        var user = await userManager.FindByEmailAsync(basicLoginDto.Username) ?? throw new NotFoundException("User not found");
+        
+        if (user.PasswordHash != null)
+        {
+            if (!user.PasswordHash.Decrypt(aesEncryptionConfiguration.Value.Key).Equals(basicLoginDto.Password))
+            {
+                throw new UnauthorizedAccessException();
+            }
+            await userManager.UpdateSecurityStampAsync(user);
+            var authClaims = new List<Claim>();
+            var roles = new List<string>();
+
+            var rolesFromDb = await userManager.GetRolesAsync(user);
+            
+            foreach (var roleFromDb in rolesFromDb)
+            {
+                roles.Add(roleFromDb);
+                authClaims.Add(new Claim(ClaimTypes.Role,
+                    roleFromDb));
+            }
+            
+            authClaims.Add(new Claim(ClaimTypes.Name, user.Email!));
+            
+            var token = new JwtSecurityTokenHandler().WriteToken(GenerateJwtToken(authClaims));
+            var refreshToken = GenerateRefreshToken();
+            
+            await StoreRefreshTokenAsync(user, refreshToken);
+            
+            return new CompleteLoginResponseDto(user.Id, user.FirstName, user.LastName, user.Username, user.Email, roles, token, refreshToken);
+        }
+        throw new UnauthorizedAccessException();
+    }
+    
+    
+    public async Task LogoutAsync(string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId) ?? throw new NotFoundException("User not found");
+        await RevokeAllUserRefreshTokens(user.Id);
+        await userManager.UpdateSecurityStampAsync(user);
     }
     
     
@@ -173,8 +218,6 @@ public class AuthService(ApplicationUserManager userManager, IOptions<JwtConfigu
         {
             return false;
         }
-
-        // Opozovite stari refresh token
         storedToken.IsRevoked = true;
         dbContext.RefreshTokens.Update(storedToken);
         await dbContext.SaveChangesAsync(new CancellationToken());

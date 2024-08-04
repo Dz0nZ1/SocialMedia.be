@@ -15,5 +15,10 @@ public static partial class LikeMapper
         return new LikeDetailsDto(entity.Post!.ToDetailsDto(), entity.Comment!.ToDetailsDto(),
             new UserFullNameDto(entity.User.FirstName, entity.User.LastName, entity.User.Username), entity.IsLocked);
     }
+
+    public static List<LikeDetailsDto> ToDetailsListDto(this List<Domain.Entities.Like> entities)
+    {
+        return entities.Select(e => e.ToDetailsDto()).ToList();
+    }
     
 }

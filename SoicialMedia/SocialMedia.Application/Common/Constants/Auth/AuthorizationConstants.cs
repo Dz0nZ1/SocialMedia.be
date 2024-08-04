@@ -1,4 +1,4 @@
-﻿namespace SocialMedia.Application.Common.Constants;
+﻿namespace SocialMedia.Application.Common.Constants.Auth;
 
 public class AuthorizationConstants
 {

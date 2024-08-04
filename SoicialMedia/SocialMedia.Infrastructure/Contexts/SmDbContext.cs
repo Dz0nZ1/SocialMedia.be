@@ -54,14 +54,13 @@ public class SmDbContext(DbContextOptions<SmDbContext> options): IdentityDbConte
     //     // }
     // }
     
-    // public DbSet<Event> Events => Set<Event>();
-    public override DbSet<ApplicationUser> Users => Set<ApplicationUser>();
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<Event> Events => Set<Event>();
     public DbSet<Friendship> Friendships => Set<Friendship>();
     public DbSet<Like> Likes => Set<Like>();
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<Post> Posts => Set<Post>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
   
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())

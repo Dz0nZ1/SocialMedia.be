@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SocialMedia.Application.Common.Constants;
+using SocialMedia.Application.Common.Constants.Auth;
 using SocialMedia.Application.Common.Dto.User;
 using SocialMedia.Application.Common.interfaces;
 using SocialMedia.Application.Common.Mappers.User;

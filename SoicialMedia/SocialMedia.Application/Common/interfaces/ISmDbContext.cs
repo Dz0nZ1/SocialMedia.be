@@ -10,7 +10,7 @@ public interface ISmDbContext
     public DbSet<Domain.Entities.Comment> Comments { get; }
     public DbSet<Event> Events { get; }
     public DbSet<Friendship> Friendships { get; }
-    public DbSet<Like> Likes { get; }
+    public DbSet<Domain.Entities.Like> Likes { get; }
     public DbSet<Message> Messages { get; }
     public DbSet<Domain.Entities.Post> Posts { get; }
     public DbSet<RefreshToken> RefreshTokens { get; }

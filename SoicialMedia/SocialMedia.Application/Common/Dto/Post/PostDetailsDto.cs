@@ -1,3 +1,5 @@
-﻿namespace SocialMedia.Application.Common.Dto.Post;
+﻿using SocialMedia.Application.Common.Dto.Comment;
 
-public record PostDetailsDto(string Content, string ImageUrl);
+namespace SocialMedia.Application.Common.Dto.Post;
+
+public record PostDetailsDto(string Id, string Content, string ImageUrl, List<CommentDetailsDto> Comments);

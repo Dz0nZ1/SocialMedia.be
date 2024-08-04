@@ -25,13 +25,18 @@ public class PostService(ISmDbContext dbContext, IUserService userService) : IPo
 
     public async Task<PostDetailsDto?> GetAsync(string id)
     {
-        var post = await dbContext.Posts.Where(x => x.Id.Equals(Guid.Parse(id))).FirstOrDefaultAsync() ?? throw new NotFoundException("Post not found");
+        var post = await dbContext.Posts
+            .Include(x => x.Comments)
+            .ThenInclude(x => x.User)
+            .Where(x => x.Id.Equals(Guid.Parse(id))).FirstOrDefaultAsync() ?? throw new NotFoundException("Post not found");
         return post.ToDetailsDto();
     }
 
     public async Task<List<PostDetailsDto>> GetAllAsync()
     {
-        var posts = await dbContext.Posts.ToListAsync();
+        var posts = await dbContext.Posts
+            .Include(x => x.User)   
+            .Include(x => x.Comments).ToListAsync();
         return posts.ToDetailsListDto();
     }
 

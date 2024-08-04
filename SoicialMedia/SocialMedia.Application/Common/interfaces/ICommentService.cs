@@ -5,7 +5,7 @@ namespace SocialMedia.Application.Common.interfaces;
 
 public interface ICommentService
 {
-    Task<CommentDetailsDto?> GetAsync(Guid id);
+    Task<CommentDetailsDto?> GetAsync(string id);
 
     Task<List<CommentDetailsDto>> GetAllAsync();
     
@@ -13,5 +13,5 @@ public interface ICommentService
 
     Task<CommentDetailsDto?> UpdateAsync(UpdateCommentDetailsDto comment, CancellationToken cancellationToken);
 
-    Task<DeleteResponseDto> DeleteAsync(Guid id, CancellationToken cancellationToken);
+    Task<DeleteResponseDto> DeleteAsync(string id, CancellationToken cancellationToken);
 }
